@@ -9,6 +9,13 @@ service EmailService {
     rpc AddEmailTemplate (EmailTemplateRequest) returns (EmailTemplateResponse) {}
 }
 
+
+enum TemplateType {
+  PLAIN_TEXT = 0;   
+  HTML = 1;
+}
+
+
 message SendEmailRequest{
     string firstname = 1;
     string to = 2;
@@ -21,10 +28,11 @@ message SendEmailResponse {
 
 message EmailTemplateRequest {
     string template_name = 1;
-    string template_type = 2;
+    TemplateType template_type = 2;
     string template_body = 3;
 }
 
 message EmailTemplateResponse {
     bool is_added = 1;
+    string message = 2;
 }
