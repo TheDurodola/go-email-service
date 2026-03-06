@@ -4,6 +4,8 @@ package emailservice;
 
 option go_package = "github.com/TheDurodola/go-email-service/src/config/emailservice";
 
+import "validate/validate.proto";
+
 service EmailService {
     rpc SendEmail (SendEmailRequest) returns (SendEmailResponse) {}
     rpc AddEmailTemplate (EmailTemplateRequest) returns (EmailTemplateResponse) {}
@@ -17,9 +19,13 @@ enum TemplateType {
 
 
 message SendEmailRequest{
-    string firstname = 1;
-    string to = 2;
-    string template_name = 3;
+    string firstname = 1 [(validate.rules).string = {
+    min_len: 2,
+    max_len: 100,
+    pattern: "^[a-zA-Z\\s\\-']+$" 
+  }];
+    string to = 2 [(validate.rules).string.email = true];
+    string template_name = 3 ;
     string app_name = 4;
 }
 
