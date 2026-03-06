@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/TheDurodola/go-email-service/internal/data/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -30,6 +31,15 @@ func InitDB() (*gorm.DB, error) {
         host, user, pass, name, port)
 		
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+    if err != nil {
+        return nil, fmt.Errorf("failed to connect to database: %w", err)
+    }
+    err = db.AutoMigrate(&models.OutgoingEmail{}, &models.EmailTemplate{})
+    if err != nil {
+        return nil, fmt.Errorf("failed to migrate database: %v", err)
+    }
+
     sqlDB, err := db.DB()
     sqlDB.SetMaxIdleConns(10)
     sqlDB.SetMaxOpenConns(100)

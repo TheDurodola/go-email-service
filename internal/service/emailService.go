@@ -27,7 +27,7 @@ func (s *EmailServer) SendEmail(ctx context.Context, req *pb.SendEmailRequest) (
 		FirstName: firstname,
 	}
 
-	if err := s.Repo.CreateEmailLog(emailLog); err != nil {
+	if err := s.Repo.CreateLog(emailLog); err != nil {
 		return nil, status.Error(codes.Internal, "failed to persist email log")
 	}
 
@@ -48,7 +48,7 @@ func (s *EmailServer) AddEmailTemplate(ctx context.Context, req *pb.EmailTemplat
 	}
 
 
-	if err := s.Repo.CreateEmailTemplate(template); err != nil {
+	if err := s.Repo.CreateTemplate(template); err != nil {
 		return nil, err
 	}
 
