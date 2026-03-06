@@ -4,9 +4,10 @@ import (
 	"log"
 	"net"
 
+	email "github.com/TheDurodola/go-email-service/api/email"
 	"github.com/TheDurodola/go-email-service/internal/config"
-	"github.com/TheDurodola/go-email-service/internal/service" 
-	email "github.com/TheDurodola/go-email-service/api/email"     
+	"github.com/TheDurodola/go-email-service/internal/data/repositories"
+	"github.com/TheDurodola/go-email-service/internal/service"
 	"google.golang.org/grpc"
 )
 
@@ -24,12 +25,12 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-
+	emailRepo := repositories.NewEmailRepository(db)
 	grpcServer := grpc.NewServer()
 
 	// 4. Register your Service Implementation
 	// This connects your 'routeGuideServer' or 'emailServer' to the gRPC engine
-	emailImpl := &service.EmailServer{DB: db} 
+	emailImpl := &service.EmailServer{Repo: emailRepo} 
 	email.RegisterEmailServiceServer(grpcServer, emailImpl)
 
 	log.Printf("gRPC server listening at %v", lis.Addr())

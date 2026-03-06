@@ -11,8 +11,8 @@ service EmailService {
 
 
 enum TemplateType {
-  PLAIN_TEXT = 0;   
-  HTML = 1;
+  STATIC = 0;   
+  DYNAMIC = 1;
 }
 
 
@@ -20,6 +20,7 @@ message SendEmailRequest{
     string firstname = 1;
     string to = 2;
     string template_name = 3;
+    string app_name = 4;
 }
 
 message SendEmailResponse {

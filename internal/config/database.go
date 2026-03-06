@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -29,7 +30,10 @@ func InitDB() (*gorm.DB, error) {
         host, user, pass, name, port)
 		
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-    
+    sqlDB, err := db.DB()
+    sqlDB.SetMaxIdleConns(10)
+    sqlDB.SetMaxOpenConns(100)
+    sqlDB.SetConnMaxLifetime(time.Hour)
 	
     return db, err
 }
