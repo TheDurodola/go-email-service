@@ -5,18 +5,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type gormEmailRepo struct {
-    db *gorm.DB
+type GormEmailRepo struct {
+	db *gorm.DB
 }
 
-func NewEmailRepository(db *gorm.DB) *gormEmailRepo {
-    return &gormEmailRepo{db: db}
+func NewEmailRepository(db *gorm.DB) *GormEmailRepo {
+	return &GormEmailRepo{db: db}
 }
 
-func (r *gormEmailRepo) CreateLog(log *models.OutgoingEmail) error {
-    return r.db.Create(log).Error
+func (r *GormEmailRepo) CreateLog(log *models.OutgoingEmail) error {
+	return r.db.Create(log).Error
 }
 
-func (r *gormEmailRepo) CreateTemplate(template *models.EmailTemplate) error {
-    return r.db.Create(template).Error
+func (r *GormEmailRepo) CreateTemplate(template *models.EmailTemplate) error {
+	return r.db.Create(template).Error
 }
