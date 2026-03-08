@@ -7,6 +7,7 @@
 package emailservice
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -180,12 +181,13 @@ func (x *SendEmailResponse) GetIsSent() bool {
 }
 
 type EmailTemplateRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	TemplateName  string                 `protobuf:"bytes,1,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
-	TemplateType  TemplateType           `protobuf:"varint,2,opt,name=template_type,json=templateType,proto3,enum=emailservice.TemplateType" json:"template_type,omitempty"`
-	TemplateBody  string                 `protobuf:"bytes,3,opt,name=template_body,json=templateBody,proto3" json:"template_body,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	TemplateName    string                 `protobuf:"bytes,1,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`
+	TemplateType    TemplateType           `protobuf:"varint,2,opt,name=template_type,json=templateType,proto3,enum=emailservice.TemplateType" json:"template_type,omitempty"`
+	TemplateBody    string                 `protobuf:"bytes,3,opt,name=template_body,json=templateBody,proto3" json:"template_body,omitempty"`
+	TemplateSubject string                 `protobuf:"bytes,4,opt,name=template_subject,json=templateSubject,proto3" json:"template_subject,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *EmailTemplateRequest) Reset() {
@@ -235,6 +237,13 @@ func (x *EmailTemplateRequest) GetTemplateType() TemplateType {
 func (x *EmailTemplateRequest) GetTemplateBody() string {
 	if x != nil {
 		return x.TemplateBody
+	}
+	return ""
+}
+
+func (x *EmailTemplateRequest) GetTemplateSubject() string {
+	if x != nil {
+		return x.TemplateSubject
 	}
 	return ""
 }
@@ -295,18 +304,19 @@ var File_proto_email_emailservice_proto protoreflect.FileDescriptor
 
 const file_proto_email_emailservice_proto_rawDesc = "" +
 	"\n" +
-	"\x1eproto/email/emailservice.proto\x12\femailservice\"\x80\x01\n" +
+	"\x1eproto/email/emailservice.proto\x12\femailservice\x1aIthird_party/protovalidate/proto/protovalidate/buf/validate/validate.proto\"\x89\x01\n" +
 	"\x10SendEmailRequest\x12\x1c\n" +
-	"\tfirstname\x18\x01 \x01(\tR\tfirstname\x12\x0e\n" +
-	"\x02to\x18\x02 \x01(\tR\x02to\x12#\n" +
+	"\tfirstname\x18\x01 \x01(\tR\tfirstname\x12\x17\n" +
+	"\x02to\x18\x02 \x01(\tB\a\xbaH\x04r\x02`\x01R\x02to\x12#\n" +
 	"\rtemplate_name\x18\x03 \x01(\tR\ftemplateName\x12\x19\n" +
 	"\bapp_name\x18\x04 \x01(\tR\aappName\",\n" +
 	"\x11SendEmailResponse\x12\x17\n" +
-	"\ais_sent\x18\x01 \x01(\bR\x06isSent\"\xa1\x01\n" +
+	"\ais_sent\x18\x01 \x01(\bR\x06isSent\"\xcc\x01\n" +
 	"\x14EmailTemplateRequest\x12#\n" +
 	"\rtemplate_name\x18\x01 \x01(\tR\ftemplateName\x12?\n" +
 	"\rtemplate_type\x18\x02 \x01(\x0e2\x1a.emailservice.TemplateTypeR\ftemplateType\x12#\n" +
-	"\rtemplate_body\x18\x03 \x01(\tR\ftemplateBody\"L\n" +
+	"\rtemplate_body\x18\x03 \x01(\tR\ftemplateBody\x12)\n" +
+	"\x10template_subject\x18\x04 \x01(\tR\x0ftemplateSubject\"L\n" +
 	"\x15EmailTemplateResponse\x12\x19\n" +
 	"\bis_added\x18\x01 \x01(\bR\aisAdded\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage*'\n" +

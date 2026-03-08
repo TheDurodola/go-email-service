@@ -44,10 +44,15 @@ func (s *EmailServer) SendEmail(ctx context.Context, req *pb.SendEmailRequest) (
 	BREVO_API_KEY := os.Getenv("BREVO_API_KEY")
 	url := os.Getenv("BREVO_URL")
 
+	template, err := s.Repo.GetTemplateByName(templateName)
+	if err != nil {
+		return nil, status.Error(codes.NotFound, "template not found")
+	}
+
+	
 	payload := strings.NewReader("{\n  \"htmlContent\": " +
-		"\"<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Brevo.</p></body>" +
-		"</html>\",\n  \"sender\": {\n    \"email\": \"" + os.Getenv("SENDER_EMAIL") + "\",\n    \"name\": \"Bolaji " +
-		"from YRSD\"\n  },\n  \"subject\": \"Hello from YRSD!\",\n  \"to\": [\n    {\n      \"email\": \"" + recipient +
+		"\"" + template.Body + "\"\",\n  \"sender\": {\n    \"email\": \"" + os.Getenv("SENDER_EMAIL") + "\",\n    \"name\": \"Bolaji " +
+		"from YRSD\"\n  },\n  \"subject\": \""+ template.Subject +"\",\n  \"to\": [\n    {\n      \"email\": \"" + recipient +
 		"\",\n  \"name\": \"" + firstname + "\"\n    }\n  ]\n}")
 
 	req2, _ := http.NewRequest("POST", url, payload)
@@ -84,6 +89,7 @@ func (s *EmailServer) AddEmailTemplate(ctx context.Context, req *pb.EmailTemplat
 		Type: models.TemplateType(req.GetTemplateType()),
 		Name: req.GetTemplateName(),
 		Body: req.GetTemplateBody(),
+		Subject: req.GetTemplateSubject(),
 	}
 
 	if err := s.Repo.CreateTemplate(template); err != nil {
@@ -91,6 +97,7 @@ func (s *EmailServer) AddEmailTemplate(ctx context.Context, req *pb.EmailTemplat
 	}
 
 	return &pb.EmailTemplateResponse{
+		IsAdded: true,
 		Message: "Template added successfully",
 	}, nil
 

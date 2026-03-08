@@ -24,9 +24,6 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	rabbitMQ := config.NewRabbitMQConnection()
-	defer rabbitMQ.Close()
-	brevo := config.NewBrevoClient()
 
 	emailRepo := repositories.NewEmailRepository(db)
 	grpcServer := grpc.NewServer()

@@ -1,0 +1,64 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release (e.g. "v1.0.0")'
+        required: true
+
+permissions:
+  id-token: write
+  attestations: write
+  contents: write
+
+jobs:
+  create-release-tag:
+    name: Create release tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Create tag
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const tag = '${{ github.event.inputs.tag_name }}';
+            const toolsTag = `tools/${tag}`;
+            const commitTag = await github.rest.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag,
+              message: tag,
+              object: context.sha,
+              type: 'commit',
+            });
+            const toolsCommitTag = await github.rest.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: toolsTag,
+              message: toolsTag,
+              object: context.sha,
+              type: 'commit',
+            });
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${tag}`,
+              sha: commitTag.data.sha,
+            });
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${toolsTag}`,
+              sha: toolsCommitTag.data.sha,
+            });
+  release:
+    uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.3.0
+    needs: create-release-tag
+    with:
+      release_files: protovalidate-*.tar.gz
+      prerelease: false
+      draft: true
+      tag_name: ${{ github.event.inputs.tag_name }}

@@ -1,0 +1,23 @@
+{
+  "homepage": "https://github.com/bufbuild/protovalidate",
+  "maintainers": [
+    {
+      "name": "Protovalidate Team",
+      "email": "bcr-github@buf.build",
+      "github": "bcr-buf"
+    },
+    {
+      "name": "Timo Stamm",
+      "email": "tstamm@buf.build",
+      "github": "timostamm"
+    },
+    {
+      "name": "Sri Krishna Paritala",
+      "email": "skrishna@buf.build",
+      "github": "srikrsna-buf"
+    }
+  ],
+  "repository": ["github:bufbuild/protovalidate"],
+  "versions": [],
+  "yanked_versions": {}
+}
